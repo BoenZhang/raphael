@@ -564,7 +564,6 @@ define(["./raphael.core"], function(R) {
                         var cssrule = att.replace(/(\-.)/g, function (w) {
                             return w.substring(1).toUpperCase();
                         });
-                        node.style[cssrule] = value;
                         o._.dirty = 1;
                         node.setAttribute(att, value);
                         break;
@@ -572,47 +571,10 @@ define(["./raphael.core"], function(R) {
             }
         }
 
-        tuneText(o, params);
+        // tuneText(o, params);
         node.style.visibility = vis;
     },
     leading = 1.2,
-    tuneText = function (el, params) {
-        if (el.type != "text" || !(params[has]("text") || params[has]("font") || params[has]("font-size") || params[has]("x") || params[has]("y"))) {
-            return;
-        }
-        var a = el.attrs,
-            node = el.node,
-            fontSize = node.firstChild ? toInt(R._g.doc.defaultView.getComputedStyle(node.firstChild, E).getPropertyValue("font-size"), 10) : 10;
-
-        if (params[has]("text")) {
-            a.text = params.text;
-            while (node.firstChild) {
-                node.removeChild(node.firstChild);
-            }
-            var texts = Str(params.text).split("\n"),
-                tspans = [],
-                tspan;
-            for (var i = 0, ii = texts.length; i < ii; i++) {
-                tspan = $("tspan");
-                i && $(tspan, {dy: fontSize * leading, x: a.x});
-                tspan.appendChild(R._g.doc.createTextNode(texts[i]));
-                node.appendChild(tspan);
-                tspans[i] = tspan;
-            }
-        } else {
-            tspans = node.getElementsByTagName("tspan");
-            for (i = 0, ii = tspans.length; i < ii; i++) if (i) {
-                $(tspans[i], {dy: fontSize * leading, x: a.x});
-            } else {
-                $(tspans[0], {dy: 0});
-            }
-        }
-        $(node, {x: a.x, y: a.y});
-        el._.dirty = 1;
-        var bb = el._getBBox(),
-            dif = a.y - (bb.y + bb.height / 2);
-        dif && R.is(dif, "finite") && $(tspans[0], {dy: dif});
-    },
     getRealNode = function (node) {
         if (node.parentNode && node.parentNode.tagName.toLowerCase() === "a") {
             return node.parentNode;
@@ -1244,6 +1206,7 @@ define(["./raphael.core"], function(R) {
     };
     R._engine.text = function (svg, x, y, text) {
         var el = $("text");
+        el.appendChild(R._g.doc.createTextNode(text));
         svg.canvas && svg.canvas.appendChild(el);
         var res = new Element(el, svg);
         res.attrs = {

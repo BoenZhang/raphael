@@ -169,7 +169,7 @@ define(["eve"], function(eve) {
             "fill-opacity": 1,
             font: '10px "Arial"',
             "font-family": '"Arial"',
-            "font-size": "10",
+            "font-size": "12",
             "font-style": "normal",
             "font-weight": 400,
             gradient: 0,

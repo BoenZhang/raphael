@@ -1,4 +1,4 @@
-define(["./raphael.core", "./raphael.svg", "./raphael.vml"], function(R) {
+define(["./raphael.core", "./raphael.svg"], function(R) {
 
     return R;
 
